@@ -1,11 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Allow,
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { Transform } from 'class-transformer';
+import { Allow, IsDate, IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class UserDto {
   @ApiProperty({ example: '12/05/95', default: '12/05/95' })
@@ -34,7 +29,12 @@ export class CreateUserBodyDto {
   @ApiProperty({ example: 'jao123', default: 'jao123' })
   nickname: string;
 
-  @IsNotEmpty()
+  @Transform(({ value }) => {
+    const [day, month, year] = value.split('/');
+    const fullYear = `20${year.length === 2 ? year : year}`;
+    return new Date(`${fullYear}-${month}-${day}`);
+  })
+  @IsDate({ message: 'Birthday must be a valid date (DD/MM/YY)' })
   @ApiProperty({ example: '12/05/95', default: '12/05/95' })
   birthday: Date;
 
@@ -43,29 +43,29 @@ export class CreateUserBodyDto {
   picture?: string;
 }
 
-export class UpdateUserBodyDto {
-  @IsOptional()
-  @IsString({ always: false })
-  @ApiProperty({ example: 'João Paulo', default: 'João Paulo' })
-  name?: string;
-
-  @IsOptional()
-  @IsEmail()
-  @ApiProperty({ example: 'jao@hotmail.com', default: 'jao@hotmail.com' })
-  email?: string;
-
-  @IsOptional()
-  @IsString({ always: false })
-  @ApiProperty({ example: 'jao123', default: 'jao123' })
-  nickname?: string;
-
-  @IsOptional()
-  @IsString({ always: false })
-  @ApiProperty({ example: 'idFromCollection', default: 'idFromCollection' })
-  picture?: string;
-}
-
 export class WriteoperationDto {
   @ApiProperty({ required: true, default: 'YHBnSIOpZYKmE2iL5C5A' })
   id: string;
+}
+
+export class UpdateUserBodyDto {
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsEmail({}, { message: 'Invalid email format' })
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  picture?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    const [day, month, year] = value.split('/');
+    return new Date(`${day}-${month}-${year}`);
+  })
+  @IsDate({ message: 'Birthday must be a valid date (DD/MM/YY)' })
+  birthday?: Date;
 }

@@ -1,6 +1,16 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserBodyDto } from './dto/user.dto';
+import { CreateUserBodyDto, UpdateUserBodyDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 
 @ApiTags('Users')
@@ -18,7 +28,23 @@ export class UsersController {
   @Post()
   @ApiOperation({ summary: 'Create new user' })
   @ApiResponse({ status: 201, description: 'Create a new user data infos' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   create(@Body() body: CreateUserBodyDto) {
     return this.usersService.create(body);
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'Update user' })
+  @ApiResponse({ status: 200, description: 'Update user info' })
+  @UsePipes(new ValidationPipe({ transform: true }))
+  update(@Param('id') id: string, @Body() body: UpdateUserBodyDto) {
+    return this.usersService.update(id, body);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete user' })
+  @ApiResponse({ status: 200, description: 'User deleted successfully' })
+  delete(@Param('id') id: string) {
+    return this.usersService.delete(id);
   }
 }
