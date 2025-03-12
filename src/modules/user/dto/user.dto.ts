@@ -18,16 +18,16 @@ export class UserDto {
 
 export class CreateUserBodyDto {
   @IsString()
-  @ApiProperty({ example: 'João Paulo', default: 'João Paulo' })
+  @ApiProperty({ required: true, example: 'João Paulo', default: 'João Paulo' })
   name: string;
 
   @IsEmail()
-  @ApiProperty({ example: 'jao@hotmail.com', default: 'jao@hotmail.com' })
+  @ApiProperty({
+    required: true,
+    example: 'jao@hotmail.com',
+    default: 'jao@hotmail.com',
+  })
   email: string;
-
-  @IsString()
-  @ApiProperty({ example: 'jao123', default: 'jao123' })
-  nickname: string;
 
   @Transform(({ value }) => {
     const [day, month, year] = value.split('/');
@@ -35,30 +35,40 @@ export class CreateUserBodyDto {
     return new Date(`${fullYear}-${month}-${day}`);
   })
   @IsDate({ message: 'Birthday must be a valid date (DD/MM/YY)' })
-  @ApiProperty({ example: '12/05/95', default: '12/05/95' })
+  @ApiProperty({ required: false, example: '12/05/95', default: '12/05/95' })
   birthday: Date;
 
   @Allow()
-  @ApiProperty({ example: 'idFromCollection', default: 'idFromCollection' })
-  picture?: string;
+  @ApiProperty({
+    required: false,
+    example: 'idFromCollection',
+    default: 'idFromCollection',
+  })
+  picture: string;
 }
 
 export class WriteoperationDto {
-  @ApiProperty({ required: true, default: 'YHBnSIOpZYKmE2iL5C5A' })
+  @ApiProperty({
+    required: true,
+    default: '24e3ce30-c7fb-42c0-84d2-6fdfbc1ecd93',
+  })
   id: string;
 }
 
 export class UpdateUserBodyDto {
   @IsOptional()
   @IsString()
+  @ApiProperty({ required: false })
   name?: string;
 
   @IsOptional()
   @IsEmail({}, { message: 'Invalid email format' })
+  @ApiProperty({ required: false })
   email?: string;
 
   @IsOptional()
   @IsString()
+  @ApiProperty({ required: false })
   picture?: string;
 
   @IsOptional()
@@ -67,5 +77,6 @@ export class UpdateUserBodyDto {
     return new Date(`${day}-${month}-${year}`);
   })
   @IsDate({ message: 'Birthday must be a valid date (DD/MM/YY)' })
+  @ApiProperty({ required: false })
   birthday?: Date;
 }

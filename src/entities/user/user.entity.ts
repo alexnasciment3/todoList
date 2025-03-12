@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Task } from '../task/task.entity';
 
 @Entity()
 export class User {
@@ -13,10 +21,19 @@ export class User {
   email: string;
 
   //TODO: Ajeitar essa data
-  @Column({ type: 'date' })
+  @Column({ type: 'varchar', nullable: true })
   @ApiProperty({ example: '12/05/95', default: '12/05/95' })
   birthday: Date;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   picture: string;
+
+  @CreateDateColumn({ type: 'varchar' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'varchar' })
+  updatedAt: Date;
+
+  @OneToMany(() => Task, (task) => task.user)
+  tasks: Task[];
 }
