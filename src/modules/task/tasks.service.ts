@@ -18,9 +18,14 @@ export class TasksService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<Task[]> {
+  async findAll(userId: string): Promise<Task[]> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found');
     return this.taskRepository.find({
       relations: ['user'],
+      where: {
+        user,
+      },
     });
   }
 
@@ -34,9 +39,12 @@ export class TasksService {
     return fetchedTask;
   }
 
-  async create(createTaskDto: CreateTaskBodyDto): Promise<Task> {
+  async create(
+    createTaskDto: CreateTaskBodyDto,
+    userId: string,
+  ): Promise<Task> {
     const user = await this.userRepository.findOne({
-      where: { id: createTaskDto.userId },
+      where: { id: userId },
     });
 
     if (!user) {

@@ -6,12 +6,14 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 import {
   CreateTaskBodyDto,
   GeTaskOperationDto,
@@ -26,32 +28,33 @@ export class TasksController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  @ApiOperation({ summary: '' })
-  @ApiResponse({ status: 200, description: "The list user' tasks." })
-  findAll() {
-    return this.tasksService.findAll();
+  @ApiOperation({ summary: "Get all created use's tasks" })
+  @ApiResponse({ status: 200, description: "The list user's tasks." })
+  findAll(@Req() req: Request) {
+    return this.tasksService.findAll((req as any).user?.userId);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   @ApiOperation({ summary: '' })
-  @ApiResponse({ status: 200, description: "The list user' tasks." })
+  @ApiResponse({ status: 200, description: 'The task by id' })
   findOne(@Param() param: GeTaskOperationDto) {
     return this.tasksService.findOne(param);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  @ApiOperation({ summary: 'Create new task to user' })
+  @ApiOperation({ summary: "Create new use' task" })
   @ApiResponse({ status: 201, description: 'Task created' })
   @UsePipes(new ValidationPipe({ transform: true }))
-  create(@Body() body: CreateTaskBodyDto) {
-    return this.tasksService.create(body);
+  create(@Body() body: CreateTaskBodyDto, @Req() req: Request) {
+    const userId = (req as any).user?.userId;
+    return this.tasksService.create(body, userId);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':id')
-  @ApiOperation({ summary: 'Update task from a user' })
+  @ApiOperation({ summary: "Update use's task" })
   @ApiResponse({ status: 200, description: 'Update user info' })
   @UsePipes(new ValidationPipe({ transform: true }))
   update(
@@ -63,7 +66,7 @@ export class TasksController {
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete task from a user' })
+  @ApiOperation({ summary: "Delete use's task" })
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   delete(@Param('id') param: GeTaskOperationDto) {
     return this.tasksService.delete(param.id);

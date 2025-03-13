@@ -20,14 +20,6 @@ export class CreateTaskBodyDto {
   })
   description: string;
 
-  @ApiProperty({
-    required: true,
-    example: '24e3ce30-c7fb-42c0-84d2-6fdfbc1ecd93',
-    default: '24e3ce30-c7fb-42c0-84d2-6fdfbc1ecd93',
-  })
-  @IsString()
-  userId: string;
-
   @Transform(({ value }) => {
     const [day, month, year] = value.split('/');
     const fullYear = `20${year.length === 2 ? year : year}`;

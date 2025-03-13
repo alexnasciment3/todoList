@@ -43,7 +43,7 @@ export class UsersController {
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':id')
-  @ApiOperation({ summary: 'Update user' })
+  @ApiOperation({ summary: "Update user' fields" })
   @ApiResponse({ status: 200, description: 'Update user info' })
   @UsePipes(new ValidationPipe({ transform: true }))
   update(
@@ -63,6 +63,8 @@ export class UsersController {
 
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Get authenticated user' })
+  @ApiResponse({ status: 200, description: 'Get authenticated user' })
   getProfile(@Req() req) {
     return req.user;
   }
