@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -58,5 +59,11 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   delete(@Param('id') param: GetUserOperationDto) {
     return this.usersService.delete(param.id);
+  }
+
+  @Get('me')
+  @UseGuards(AuthGuard('jwt'))
+  getProfile(@Req() req) {
+    return req.user;
   }
 }

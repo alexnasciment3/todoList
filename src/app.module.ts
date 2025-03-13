@@ -15,7 +15,7 @@ import { UsersModule } from './modules/user/users.module';
     TasksModule,
     AuthModule,
     ConfigModule.forRoot({
-      envFilePath: `.env`,
+      envFilePath: `/src/env/.env`,
       isGlobal: true,
     }),
   ],
