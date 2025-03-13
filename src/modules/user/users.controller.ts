@@ -6,9 +6,11 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   CreateUserBodyDto,
@@ -22,6 +24,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'The list of users.' })
@@ -37,6 +40,7 @@ export class UsersController {
     return this.usersService.create(body);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   @ApiOperation({ summary: 'Update user' })
   @ApiResponse({ status: 200, description: 'Update user info' })
@@ -48,6 +52,7 @@ export class UsersController {
     return this.usersService.update(param.id, body);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   @ApiOperation({ summary: 'Delete user' })
   @ApiResponse({ status: 200, description: 'User deleted successfully' })

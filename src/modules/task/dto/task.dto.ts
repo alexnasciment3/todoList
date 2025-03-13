@@ -49,15 +49,18 @@ export class CreateTaskBodyDto {
 export class UpdateTaskBodyDto {
   @IsOptional()
   @IsString()
+  @ApiProperty({ required: false })
   name?: string;
 
   @IsOptional()
   @IsEmail({}, { message: 'Invalid email format' })
-  email?: string;
+  @ApiProperty({ required: false })
+  description?: string;
 
   @IsOptional()
   @IsString()
-  picture?: string;
+  @ApiProperty({ required: false })
+  isDone?: boolean;
 
   @IsOptional()
   @Transform(({ value }) => {
@@ -65,7 +68,8 @@ export class UpdateTaskBodyDto {
     return new Date(`${day}-${month}-${year}`);
   })
   @IsDate({ message: 'Birthday must be a valid date (DD/MM/YY)' })
-  birthday?: Date;
+  @ApiProperty({ required: false })
+  limitDateToFinish?: Date;
 }
 
 export class GeTaskOperationDto {

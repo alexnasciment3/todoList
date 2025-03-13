@@ -21,6 +21,9 @@ export class UsersService {
     return this.userRepository.find();
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOne({ where: { email } });
+  }
   async create(newUser: CreateUserBodyDto): Promise<User> {
     const imageURL = await axios.get('https://picsum.photos/200');
 

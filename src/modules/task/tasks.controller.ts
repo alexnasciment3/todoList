@@ -6,9 +6,11 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   CreateTaskBodyDto,
@@ -22,6 +24,7 @@ import { TasksService } from './tasks.service';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 200, description: "The list user' tasks." })
@@ -29,6 +32,7 @@ export class TasksController {
     return this.tasksService.findAll();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 200, description: "The list user' tasks." })
@@ -36,6 +40,7 @@ export class TasksController {
     return this.tasksService.findOne(param);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   @ApiOperation({ summary: 'Create new task to user' })
   @ApiResponse({ status: 201, description: 'Task created' })
@@ -44,6 +49,7 @@ export class TasksController {
     return this.tasksService.create(body);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   @ApiOperation({ summary: 'Update task from a user' })
   @ApiResponse({ status: 200, description: 'Update user info' })
@@ -55,6 +61,7 @@ export class TasksController {
     return this.tasksService.update(param.id, body);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   @ApiOperation({ summary: 'Delete task from a user' })
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
