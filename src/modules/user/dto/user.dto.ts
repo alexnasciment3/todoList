@@ -38,6 +38,10 @@ export class CreateUserBodyDto {
   @ApiProperty({ required: false, example: '12/05/95', default: '12/05/95' })
   birthday: Date;
 
+  @IsString()
+  @ApiProperty({ required: true, example: '123123a', default: '123123a' })
+  password;
+
   @Allow()
   @ApiProperty({
     required: false,
@@ -47,7 +51,7 @@ export class CreateUserBodyDto {
   picture: string;
 }
 
-export class WriteoperationDto {
+export class GetUserOperationDto {
   @ApiProperty({
     required: true,
     default: '24e3ce30-c7fb-42c0-84d2-6fdfbc1ecd93',

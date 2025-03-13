@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
+import { hash } from 'bcrypt-ts';
 import { User } from 'src/entities/user/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserBodyDto, UpdateUserBodyDto } from './dto/user.dto';
@@ -22,11 +23,19 @@ export class UsersService {
 
   async create(newUser: CreateUserBodyDto): Promise<User> {
     const imageURL = await axios.get('https://picsum.photos/200');
-    console.log('===>', newUser.birthday);
+
+    const emailAlreadyInUse = await this.userRepository.findOne({
+      where: { email: newUser.email },
+    });
+
+    if (emailAlreadyInUse)
+      throw new BadRequestException('Email already in use');
+
     try {
       const user = this.userRepository.create({
         ...newUser,
         birthday: newUser.birthday,
+        password: await hash(newUser.password, 10),
         picture: imageURL.request.res.responseUrl,
       });
       return this.userRepository.save(user);

@@ -67,3 +67,11 @@ export class UpdateTaskBodyDto {
   @IsDate({ message: 'Birthday must be a valid date (DD/MM/YY)' })
   birthday?: Date;
 }
+
+export class GeTaskOperationDto {
+  @ApiProperty({
+    required: true,
+    default: '24e3ce30-c7fb-42c0-84d2-6fdfbc1ecd93',
+  })
+  id: string;
+}

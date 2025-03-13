@@ -10,7 +10,11 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateTaskBodyDto, UpdateTaskBodyDto } from './dto/task.dto';
+import {
+  CreateTaskBodyDto,
+  GeTaskOperationDto,
+  UpdateTaskBodyDto,
+} from './dto/task.dto';
 import { TasksService } from './tasks.service';
 
 @ApiTags('Tasks')
@@ -25,6 +29,13 @@ export class TasksController {
     return this.tasksService.findAll();
   }
 
+  @Get(':id')
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 200, description: "The list user' tasks." })
+  findOne(@Param() param: GeTaskOperationDto) {
+    return this.tasksService.findOne(param);
+  }
+
   @Post()
   @ApiOperation({ summary: 'Create new task to user' })
   @ApiResponse({ status: 201, description: 'Task created' })
@@ -37,14 +48,17 @@ export class TasksController {
   @ApiOperation({ summary: 'Update task from a user' })
   @ApiResponse({ status: 200, description: 'Update user info' })
   @UsePipes(new ValidationPipe({ transform: true }))
-  update(@Param('id') id: string, @Body() body: UpdateTaskBodyDto) {
-    return this.tasksService.update(id, body);
+  update(
+    @Param('id') param: GeTaskOperationDto,
+    @Body() body: UpdateTaskBodyDto,
+  ) {
+    return this.tasksService.update(param.id, body);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete task from a user' })
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
-  delete(@Param('id') id: string) {
-    return this.tasksService.delete(id);
+  delete(@Param('id') param: GeTaskOperationDto) {
+    return this.tasksService.delete(param.id);
   }
 }

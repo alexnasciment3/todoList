@@ -3,7 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from 'src/entities/task/task.entity';
 import { User } from 'src/entities/user/user.entity';
 import { Repository } from 'typeorm';
-import { CreateTaskBodyDto, UpdateTaskBodyDto } from './dto/task.dto';
+import {
+  CreateTaskBodyDto,
+  GeTaskOperationDto,
+  UpdateTaskBodyDto,
+} from './dto/task.dto';
 
 @Injectable()
 export class TasksService {
@@ -20,6 +24,16 @@ export class TasksService {
     });
   }
 
+  async findOne(param: GeTaskOperationDto): Promise<Task> {
+    const { id } = param;
+
+    const fetchedTask = await this.taskRepository.findOne({ where: { id } });
+
+    if (!fetchedTask) throw new NotFoundException(`Not found task id: ${id}`);
+
+    return fetchedTask;
+  }
+
   async create(createTaskDto: CreateTaskBodyDto): Promise<Task> {
     const user = await this.userRepository.findOne({
       where: { id: createTaskDto.userId },
@@ -29,7 +43,11 @@ export class TasksService {
       throw new Error('User not found');
     }
 
-    const newTask = this.taskRepository.create({ ...createTaskDto, user });
+    const newTask = this.taskRepository.create({
+      ...createTaskDto,
+      user,
+      isDone: false,
+    });
     return this.taskRepository.save(newTask);
   }
 
