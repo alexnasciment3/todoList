@@ -2,94 +2,88 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-## Description
+## Tecnologias Utilizadas
+
+Este projeto foi desenvolvido utilizando as seguintes tecnologias:
+
+- **Node.js** - Ambiente de execução JavaScript no servidor
+- **NestJS** - Framework progressivo para construção de aplicações eficientes e escaláveis
+- **TypeScript** - Superset do JavaScript que adiciona tipagem estática
+- **TypeORM** - ORM para manipulação de banco de dados de forma estruturada e orientada a objetos
+- **SQLite** - Banco de dados leve e fácil de configurar
+
+## Descrição
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Project setup
+## Configuração do Projeto
 
 ```bash
 $ npm install
 ```
 
-## Compile and run the project
+## Compilar e executar o projeto
 
 ```bash
-# development
+# desenvolvimento
 $ npm run start
 
-# watch mode
+# modo watch
 $ npm run start:dev
 
-# production mode
+# modo produção
 $ npm run start:prod
 ```
 
-## Accessing Swagger UI
-
-O projeto possui uma documentação interativa através do Swagger UI. Para acessá-la:
-
-1. Inicie o projeto localmente:
-   ```bash
-   $ npm run start:dev
-   ```
-2. Acesse o Swagger UI no navegador:
-   ```
-   http://localhost:3000/api-docs
-   ```
-
-## Criando um Usuário e Autenticando no Swagger
-
-1. **Criar um Usuário:**
-   - Acesse o endpoint `POST /auth/register` no Swagger.
-   - Envie um JSON no corpo da requisição:
-     ```json
-     {
-       "email": "usuario@example.com",
-       "password": "senha123"
-     }
-     ```
-   - Clique em "Execute" e aguarde a criação do usuário.
-
-2. **Fazer Login e Obter Token:**
-   - Acesse o endpoint `POST /auth/login` no Swagger.
-   - Envie o seguinte JSON:
-     ```json
-     {
-       "email": "usuario@example.com",
-       "password": "senha123"
-     }
-     ```
-   - O Swagger retornará um **token JWT** no campo `access_token`.
-
-3. **Autenticar no Swagger:**
-   - Copie o token JWT retornado.
-   - No topo direito do Swagger, clique no botão **Authorize**.
-   - Cole o token no campo `Bearer <TOKEN>` (substitua `<TOKEN>` pelo valor copiado).
-   - Clique em **Authorize** e feche a janela.
-
-Agora, você pode acessar os demais endpoints protegidos da API.
-
-## Run tests
+## Executar Testes
 
 ```bash
-# unit tests
+# testes unitários
 $ npm run test
 
-# e2e tests
+# testes e2e
 $ npm run test:e2e
 
-# test coverage
+# cobertura de testes
 $ npm run test:cov
 ```
 
+## Como utilizar a autenticação no Swagger
 
-## Resources
+Para acessar endpoints protegidos por autenticação, siga os passos abaixo:
+
+1. Acesse a interface do Swagger através do navegador: `http://localhost:3000/api`
+2. No Swagger, vá até o endpoint de **criação de usuário** (`/auth/signup`) e crie uma conta.
+3. Depois, vá até o endpoint de **login** (`/auth/login`), informe as credenciais e obtenha o token JWT.
+4. Copie o token retornado na resposta.
+5. No Swagger, clique no botão **Authorize** (ícone de cadeado no topo direito da página).
+6. Cole o token no campo `Bearer Token` e confirme.
+7. Agora, todos os endpoints protegidos poderão ser acessados com autenticação.
+
+## Implantação
+
+Quando estiver pronto para implantar sua aplicação NestJS em produção, consulte a [documentação de implantação](https://docs.nestjs.com/deployment) para melhores práticas.
+
+Se estiver buscando uma solução baseada em nuvem para hospedar seu projeto, experimente o [Mau](https://mau.nestjs.com), nossa plataforma oficial de implantação no AWS:
+
+```bash
+$ npm install -g mau
+$ mau deploy
+```
+
+## Recursos
 
 Confira alguns recursos úteis para trabalhar com NestJS:
 
-- Visite a [Documentação do NestJS](https://docs.nestjs.com) para aprender mais.
-- Para suporte e dúvidas, acesse nosso [Discord](https://discord.gg/G7Qnnhy).
-- Explore os cursos oficiais em [NestJS Courses](https://courses.nestjs.com/).
-- Visualize sua aplicação com [NestJS Devtools](https://devtools.nestjs.com).
+- [Documentação do NestJS](https://docs.nestjs.com)
+- [Canal do Discord](https://discord.gg/G7Qnnhy) para dúvidas e suporte
+- [Cursos oficiais do NestJS](https://courses.nestjs.com/)
+- [Implantação no AWS com Mau](https://mau.nestjs.com)
+- [Ferramentas Dev do NestJS](https://devtools.nestjs.com)
+- [Suporte empresarial](https://enterprise.nestjs.com)
+- [Twitter](https://x.com/nestframework) e [LinkedIn](https://linkedin.com/company/nestjs) oficiais
+
+## Licença
+
+Nest está sob a licença [MIT](https://github.com/nestjs/nest/blob/master/LICENSE).
 
